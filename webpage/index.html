@@ -4,172 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>HeCS-omnibus</title>
-<meta name="description" content="HeCS-omnibus: a spectroscopic compilation of 227 galaxy clusters at 0.02 < z < 0.30 from MMT/Hectospec and SDSS, and MACH, the Massive Cluster Survey with Hectospec.">
+<meta name="description" content="HeCS-omnibus: a spectroscopic compilation of 227 galaxy clusters at 0.02 < z < 0.30 from MMT/Hectospec and SDSS, with caustic membership, dynamical masses and galaxy properties.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #faf8f4;
-    --bg-2: #f1ede6;
-    --ink: #1d1d1f;
-    --ink-2: #4a4845;
-    --muted: #7b7772;
-    --line: #e2ddd4;
-    --accent: #b5452b;
-    --accent-ink: #8f3520;
-    --dark: #1c1b19;
-    --dark-ink: #f4f1ea;
-    --serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-    --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    --max: 1040px;
-  }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--sans);
-    font-size: 17px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-  }
-  a { color: var(--accent-ink); text-decoration: none; }
-  a:hover { text-decoration: underline; text-underline-offset: 3px; }
-  h1, h2, h3, h4 {
-    font-family: var(--serif);
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    line-height: 1.15;
-    margin: 0 0 0.5em;
-  }
-  h2 { font-size: 2.1rem; margin-top: 0; }
-  h3 { font-size: 1.35rem; margin-top: 2.2rem; }
-  p { margin: 0 0 1.1em; }
-  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
-  .eyebrow {
-    font-family: var(--sans);
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--accent);
-    font-weight: 600;
-    margin-bottom: 0.8rem;
-  }
-  .muted { color: var(--muted); }
-  .num { font-variant-numeric: tabular-nums; }
-
-  /* nav */
-  nav {
-    position: sticky; top: 0; z-index: 10;
-    background: rgba(250,248,244,0.92);
-    backdrop-filter: saturate(180%) blur(12px);
-    -webkit-backdrop-filter: saturate(180%) blur(12px);
-    border-bottom: 1px solid var(--line);
-  }
-  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; }
-  nav .brand { font-family: var(--serif); font-size: 1.25rem; font-weight: 600; color: var(--ink); }
-  nav ul { list-style: none; display: flex; gap: 22px; margin: 0; padding: 0; align-items: center; }
-  nav li a { color: var(--ink-2); font-size: 0.95rem; }
-  nav li a.btn { padding: 6px 14px; }
-  @media (max-width: 720px) { nav li:not(.keep) { display: none; } }
-
-  .btn {
-    display: inline-block;
-    background: var(--accent);
-    color: #fff !important;
-    padding: 11px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.98rem;
-    text-decoration: none !important;
-    transition: background 0.15s;
-  }
-  .btn:hover { background: var(--accent-ink); }
-  .btn.secondary { background: transparent; color: var(--ink) !important; border: 1px solid var(--ink); }
-  .btn.secondary:hover { background: var(--ink); color: #fff !important; }
-
-  /* hero */
-  header.hero { padding: 72px 0 56px; border-bottom: 1px solid var(--line); }
-  .news { font-size: 0.92rem; color: var(--ink-2); margin-bottom: 2.2rem; }
-  .news time { color: var(--accent); font-weight: 600; margin-right: 8px; }
-  header h1 { font-size: clamp(2.8rem, 7vw, 4.6rem); font-weight: 500; margin-bottom: 0.35em; }
-  header .lede { font-family: var(--serif); font-size: clamp(1.25rem, 2.4vw, 1.6rem); line-height: 1.35; max-width: 34ch; color: var(--ink); margin-bottom: 1.2em; }
-  header .sub { max-width: 62ch; color: var(--ink-2); font-size: 1.05rem; }
-  .cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 1.8rem; }
-
-  .stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 0;
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-    margin: 0;
-  }
-  .stats div { padding: 22px 8px 20px 0; border-right: 1px solid var(--line); }
-  .stats div:last-child { border-right: none; }
-  .stats b { display: block; font-family: var(--serif); font-size: 2rem; font-weight: 500; line-height: 1; margin-bottom: 6px; }
-  .stats span { font-size: 0.85rem; color: var(--muted); }
-
-  section { padding: 72px 0; border-bottom: 1px solid var(--line); }
-  section.alt { background: var(--bg-2); }
-  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-  @media (max-width: 720px) { .two { grid-template-columns: 1fr; } }
-  .prose { max-width: 66ch; }
-
-  table { border-collapse: collapse; width: 100%; font-size: 0.92rem; margin: 1rem 0 0.5rem; }
-  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  th { font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border-bottom: 1px solid var(--ink); }
-  td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
-  tr.total td { font-weight: 600; border-top: 1px solid var(--ink); }
-  .tablewrap { overflow-x: auto; }
-  .caption { font-size: 0.88rem; color: var(--muted); margin-top: 0.5rem; }
-
-  figure { margin: 2rem 0; }
-  figure img { display: block; max-width: 100%; height: auto; margin: 0 auto; }
-  figure figcaption { font-size: 0.9rem; color: var(--ink-2); max-width: 70ch; margin: 0.9rem auto 0; line-height: 1.5; }
-  figure.fig-narrow img { max-width: 560px; }
-
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; margin: 1.5rem 0; }
-  .card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 22px 22px 18px; }
-  .card h4 { font-size: 1.1rem; margin-bottom: 0.4rem; }
-  .card p { font-size: 0.95rem; color: var(--ink-2); margin: 0; }
-  section.alt .card { background: var(--bg); }
-
-  .points { list-style: none; padding: 0; margin: 1.5rem 0; counter-reset: p; }
-  .points li { position: relative; padding-left: 3rem; margin-bottom: 1.1rem; max-width: 66ch; }
-  .points li::before { counter-increment: p; content: counter(p, decimal-leading-zero); position: absolute; left: 0; top: 0.15rem; font-family: var(--serif); font-size: 1.2rem; color: var(--accent); }
-  .points b { font-weight: 600; }
-
-  dl.methods { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 40px; margin: 1.5rem 0; }
-  @media (max-width: 720px) { dl.methods { grid-template-columns: 1fr; } }
-  dl.methods dt { font-weight: 600; margin-bottom: 4px; }
-  dl.methods dd { margin: 0; color: var(--ink-2); font-size: 0.95rem; }
-
-  /* data block */
-  .databox { background: var(--dark); color: var(--dark-ink); border-radius: 14px; padding: 40px 36px; margin: 1.5rem 0 2.5rem; }
-  .databox h3 { margin-top: 0; color: #fff; font-size: 1.6rem; }
-  .databox p { color: #cfcac0; max-width: 60ch; }
-  .databox .btn { background: #fff; color: var(--dark) !important; margin-top: 8px; }
-  .databox .btn:hover { background: var(--dark-ink); }
-  .databox small { display: block; margin-top: 14px; color: #8f8a80; font-size: 0.82rem; }
-  .cite { border-left: 3px solid var(--accent); padding: 4px 0 4px 18px; font-size: 0.95rem; color: var(--ink-2); margin: 1.5rem 0; max-width: 66ch; }
-
-  /* publications */
-  ol.pubs { list-style: none; padding: 0; margin: 0; }
-  ol.pubs li { padding: 16px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 64px 1fr; gap: 14px; }
-  ol.pubs li:last-child { border-bottom: none; }
-  ol.pubs .yr { font-family: var(--serif); font-size: 1.15rem; color: var(--muted); padding-top: 2px; }
-  ol.pubs .t { font-weight: 600; }
-  ol.pubs .a { color: var(--ink-2); font-size: 0.95rem; }
-  ol.pubs .l { font-size: 0.85rem; margin-top: 4px; }
-  ol.pubs .l a { margin-right: 14px; }
-  ol.pubs .tag { display: inline-block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); font-weight: 600; margin-left: 8px; }
-
-  footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.88rem; }
-  footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -178,9 +17,9 @@
     <a class="brand" href="#top">HeCS-omnibus</a>
     <ul>
       <li><a href="#survey">Survey</a></li>
-      <li><a href="#mach">MACH</a></li>
+      <li><a href="#catalog">Catalog</a></li>
+      <li><a href="mach/">MACH</a></li>
       <li><a href="#publications">Publications</a></li>
-      <li><a href="#contact">Contact</a></li>
       <li class="keep"><a class="btn" href="#data">Data</a></li>
     </ul>
   </div>
@@ -188,13 +27,12 @@
 
 <header class="hero" id="top">
   <div class="wrap">
-    <p class="news"><time>April 2026</time> Park et al. 2026, the first MACH paper, is published in <em>The Astrophysical Journal</em>.</p>
     <h1>HeCS-omnibus</h1>
     <p class="lede">A spectroscopic compilation of 227 galaxy clusters in the local universe.</p>
-    <p class="sub">Built from MMT/Hectospec and SDSS spectroscopy, HeCS-omnibus provides caustic-based membership, dynamical masses, and galaxy properties for clusters at 0.02&nbsp;&lt;&nbsp;<em>z</em>&nbsp;&lt;&nbsp;0.30. Its densest subset, <a href="#mach">MACH</a>, targets the nine most massive clusters nearby with complete spectroscopy.</p>
+    <p class="sub">Two decades of MMT/Hectospec and SDSS spectroscopy, reprocessed into one catalog: caustic membership, dynamical masses, and galaxy properties for clusters at 0.02&nbsp;&lt;&nbsp;<em>z</em>&nbsp;&lt;&nbsp;0.30.</p>
     <div class="cta">
       <a class="btn" href="#data">Get the data</a>
-      <a class="btn secondary" href="#mach">Explore MACH</a>
+      <a class="btn secondary" href="#survey">How it was built</a>
     </div>
   </div>
 </header>
@@ -203,10 +41,9 @@
   <div class="stats">
     <div><b class="num">227</b><span>galaxy clusters</span></div>
     <div><b class="num">52,325</b><span>spectroscopic members</span></div>
-    <div><b class="num">0.02–0.30</b><span>redshift range</span></div>
+    <div><b class="num">0.02&#8202;–&#8202;0.30</b><span>redshift range</span></div>
     <div><b class="num">~180</b><span>median members per cluster</span></div>
-    <div><b class="num">220</b><span>BCGs identified</span></div>
-    <div><b class="num">9</b><span>MACH clusters, &gt;4,500 spectra each</span></div>
+    <div><b class="num">220</b><span>brightest cluster galaxies</span></div>
   </div>
 </div>
 
@@ -217,9 +54,9 @@
       <h2>One catalog, many surveys</h2>
     </div>
     <div class="prose">
-      <p>HeCS-omnibus gathers two decades of cluster spectroscopy with the 300-fiber Hectospec on the 6.5&nbsp;m MMT — the Hectospec Cluster Survey and its X-ray, Sunyaev–Zeldovich and red-sequence selected extensions — together with SDSS redshifts and the CIRS infall-region sample, then reprocesses everything homogeneously.</p>
-      <p>Each cluster typically has ~180 spectroscopic members identified with the caustic technique, from which we derive velocity dispersions, <em>R</em><sub>200</sub> and <em>M</em><sub>200</sub>, and identify the brightest cluster galaxy. For member galaxies we provide redshifts, D<sub>n</sub>4000, stellar masses and central stellar velocity dispersions.</p>
-      <p>The compilation was assembled by Sohn, Geller, Diaferio &amp; Rines (2020) to study the connection between BCGs and their host clusters, and now serves as the parent sample for deeper follow-up.</p>
+      <p>HeCS-omnibus gathers two decades of cluster spectroscopy taken with the 300-fiber Hectospec on the 6.5&nbsp;m MMT — the Hectospec Cluster Survey and its X-ray, Sunyaev–Zeldovich and red-sequence selected extensions — together with SDSS redshifts and the CIRS infall-region sample, then reprocesses everything homogeneously.</p>
+      <p>Each cluster typically has about 180 spectroscopic members identified with the caustic technique, ranging from 16 to 1,209. From those members we derive velocity dispersions, <em>R</em><sub>200</sub> and <em>M</em><sub>200</sub>, and identify the brightest cluster galaxy.</p>
+      <p>The compilation was assembled by Sohn, Geller, Diaferio &amp; Rines (2020) to study the connection between brightest cluster galaxies and their host halos, and it now serves as the parent sample for deeper follow-up.</p>
     </div>
   </div>
 </section>
@@ -228,7 +65,7 @@
   <div class="wrap">
     <p class="eyebrow">Survey</p>
     <h2>Where the clusters come from</h2>
-    <p class="prose">HeCS-omnibus is the union of several Hectospec campaigns and the SDSS-based CIRS sample. The table lists the number of unique clusters each survey contributes.</p>
+    <p class="prose">HeCS-omnibus is the union of several Hectospec campaigns and the SDSS-based CIRS sample. The table lists the number of unique clusters each survey contributes after overlaps are removed.</p>
 
     <div class="tablewrap">
     <table>
@@ -245,105 +82,78 @@
       </tbody>
     </table>
     </div>
-    <p class="caption">Table 1 of Sohn et al. (2020). Overlaps between surveys are removed; only clusters covered by SDSS DR14 are included.</p>
+    <p class="caption">Table 1 of Sohn et al. (2020). Only clusters covered by SDSS DR14 are included.</p>
 
     <h3>How the catalog is built</h3>
     <dl class="methods">
       <dt>Spectroscopy</dt>
-      <dd>Hectospec: 300 fibers over a 1° field, 3700–9100&nbsp;Å, <em>R</em>&nbsp;~&nbsp;1500–1700, reduced with HSRed and cross-correlated with RVSAO (<em>R</em><sub>XC</sub>&nbsp;&gt;&nbsp;3). SDSS spectra for <em>r</em>&nbsp;&lt;&nbsp;17.77, supplemented by ACReS, OmegaWINGS and NED where available.</dd>
+      <dd>Hectospec: 300 fibers over a one-degree field, 3700–9100&nbsp;Å, <em>R</em>&nbsp;~&nbsp;1500–1700, reduced with HSRed and cross-correlated with RVSAO (<em>R</em><sub>XC</sub>&nbsp;&gt;&nbsp;3). SDSS spectra for <em>r</em>&nbsp;&lt;&nbsp;17.77, supplemented by ACReS, OmegaWINGS and NED where available.</dd>
       <dt>Membership</dt>
-      <dd>The caustic technique (Diaferio &amp; Geller 1997; Diaferio 1999) traces the escape-velocity envelope in redshift space. In simulations it recovers ~90% of true members within 3&nbsp;<em>R</em><sub>200</sub> with &lt;&nbsp;8% interlopers.</dd>
+      <dd>The caustic technique (Diaferio &amp; Geller 1997; Diaferio 1999) traces the escape-velocity envelope in redshift space. In simulations it recovers about 90% of true members within 3&nbsp;<em>R</em><sub>200</sub> with fewer than 8% interlopers.</dd>
       <dt>Cluster properties</dt>
-      <dd><em>M</em><sub>200</sub> and <em>R</em><sub>200</sub> from the caustic mass profile; velocity dispersion of members within <em>R</em><sub>200</sub> with the bi-weight estimator and 10,000 bootstrap resamplings.</dd>
+      <dd><em>M</em><sub>200</sub> and <em>R</em><sub>200</sub> from the caustic mass profile; velocity dispersion of members within <em>R</em><sub>200</sub> using the bi-weight estimator, with uncertainties from 10,000 bootstrap resamplings.</dd>
       <dt>Galaxy properties</dt>
-      <dd>Stellar masses from Le&nbsp;Phare SED fits to SDSS <em>ugriz</em> (BC03, Chabrier IMF); D<sub>n</sub>4000 from the spectra; central stellar velocity dispersions from SDSS/Portsmouth and Hectospec/ULySS, aperture-corrected to a 3&nbsp;kpc aperture.</dd>
+      <dd>Stellar masses from Le&nbsp;Phare SED fits to SDSS <em>ugriz</em> (BC03 models, Chabrier IMF); D<sub>n</sub>4000 from the spectra; central stellar velocity dispersions from SDSS/Portsmouth and Hectospec/ULySS, aperture-corrected to 3&nbsp;kpc.</dd>
       <dt>BCG identification</dt>
-      <dd>Brightest <em>r</em>-band member within 0.5&nbsp;<em>R</em><sub>200</sub>, then visually checked against SDSS images — about 25 clusters needed correction for crowded-field photometry.</dd>
+      <dd>The brightest <em>r</em>-band member within 0.5&nbsp;<em>R</em><sub>200</sub>, then checked against SDSS images — about 25 clusters needed correction for crowded-field photometry.</dd>
       <dt>Cosmology</dt>
       <dd><em>H</em><sub>0</sub>&nbsp;=&nbsp;70&nbsp;km&nbsp;s<sup>−1</sup>&nbsp;Mpc<sup>−1</sup>, Ω<sub>m</sub>&nbsp;=&nbsp;0.3, Ω<sub>Λ</sub>&nbsp;=&nbsp;0.7.</dd>
     </dl>
   </div>
 </section>
 
-<section id="mach">
+<section id="catalog">
   <div class="wrap">
-    <p class="eyebrow">MACH</p>
-    <h2>The Massive Cluster Survey with Hectospec</h2>
-    <p class="prose" style="font-family:var(--serif);font-size:1.25rem;line-height:1.4">Deep, dense and complete spectroscopy of the nine most massive galaxy clusters in the local universe.</p>
-    <div class="two">
-      <div class="prose">
-        <p>MACH selects the most massive, best-sampled clusters in HeCS-omnibus at 0.07&nbsp;&lt;&nbsp;<em>z</em>&nbsp;&lt;&nbsp;0.11 — a redshift window chosen so that <em>R</em><sub>200</sub> fits inside the one-degree Hectospec field. Between 2017 and 2023 we obtained 41,897 unique Hectospec spectra, targeting every galaxy brighter than <em>r</em>&nbsp;=&nbsp;21.3 with no color selection.</p>
-        <p>The result is a sample that is spectroscopically complete to <em>r</em>&nbsp;≈&nbsp;20.1–21.1 within each cluster, with 400–1,400 members per system and stellar mass functions that reach log(<em>M</em><sub>*</sub>/M<sub>☉</sub>)&nbsp;≈&nbsp;8.5, roughly two dex deeper than SDSS in the same volume.</p>
-      </div>
-      <figure class="fig-narrow" style="margin-top:0">
-        <img src="img/park2026_fig1.png" alt="M200 versus number of galaxies with spectra within R200 for HeCS-omnibus clusters (circles) and MACH clusters (stars), colored by redshift. MACH occupies the massive, well-sampled corner.">
-        <figcaption>MACH clusters (stars) among the HeCS-omnibus sample (circles) in the <em>M</em><sub>200</sub>–<em>N</em><sub>spec</sub> plane, colored by redshift. The box marks the massive, well-sampled corner MACH occupies. From Park et al. (2026), Fig. 1.</figcaption>
-      </figure>
-    </div>
-
-    <ol class="points">
-      <li><b>Complete.</b> More than 4,500 spectra per cluster and a 90% completeness limit of <em>r</em>&nbsp;≈&nbsp;20.1–21.1. Because there is no color selection, quiescent and star-forming galaxies are sampled to the same depth.</li>
-      <li><b>Massive.</b> <em>M</em><sub>200</sub> from 5.5&nbsp;×&nbsp;10<sup>14</sup> to 1.0&nbsp;×&nbsp;10<sup>15</sup>&nbsp;M<sub>☉</sub>, with a typical mass of 7.4&nbsp;×&nbsp;10<sup>14</sup>&nbsp;M<sub>☉</sub>.</li>
-      <li><b>Deep.</b> Stellar mass functions complete to log&nbsp;<em>M</em><sub>*</sub>&nbsp;&gt;&nbsp;9 without any correction, and extended to log&nbsp;<em>M</em><sub>*</sub>&nbsp;≈&nbsp;8.5 with an empirical completeness correction.</li>
-    </ol>
-
-    <h3>The nine clusters</h3>
-    <div class="tablewrap">
-    <table>
-      <thead><tr>
-        <th>Cluster</th><th class="r"><em>z</em></th><th class="r"><em>N</em><sub>spec</sub></th><th class="r"><em>N</em><sub>spec</sub>(&lt;<em>R</em><sub>200</sub>)</th><th class="r"><em>N</em><sub>mem</sub></th><th class="r"><em>N</em><sub>mem</sub>(&lt;<em>R</em><sub>200</sub>)</th><th class="r"><em>R</em><sub>200</sub> (Mpc)</th><th class="r">log <em>M</em><sub>200</sub></th><th class="r"><em>r</em><sub>comp</sub></th>
-      </tr></thead>
-      <tbody>
-        <tr><td>A2245</td><td class="r">0.088</td><td class="r">39,270</td><td class="r">1,390</td><td class="r">548</td><td class="r">312</td><td class="r">1.65</td><td class="r">14.74</td><td class="r">20.9</td></tr>
-        <tr><td>A1767</td><td class="r">0.071</td><td class="r">13,394</td><td class="r">1,840</td><td class="r">668</td><td class="r">377</td><td class="r">1.70</td><td class="r">14.78</td><td class="r">20.9</td></tr>
-        <tr><td>A2244</td><td class="r">0.099</td><td class="r">39,129</td><td class="r">1,319</td><td class="r">748</td><td class="r">364</td><td class="r">1.72</td><td class="r">14.80</td><td class="r">20.9</td></tr>
-        <tr><td>A1831</td><td class="r">0.075</td><td class="r">18,466</td><td class="r">1,785</td><td class="r">520</td><td class="r">313</td><td class="r">1.76</td><td class="r">14.82</td><td class="r">20.1</td></tr>
-        <tr><td>A2034</td><td class="r">0.113</td><td class="r">37,944</td><td class="r">915</td><td class="r">410</td><td class="r">287</td><td class="r">1.78</td><td class="r">14.85</td><td class="r">20.6</td></tr>
-        <tr><td>A7</td><td class="r">0.103</td><td class="r">13,463</td><td class="r">992</td><td class="r">436</td><td class="r">281</td><td class="r">1.83</td><td class="r">14.89</td><td class="r">20.9</td></tr>
-        <tr><td>A2255</td><td class="r">0.080</td><td class="r">11,944</td><td class="r">2,057</td><td class="r">1,099</td><td class="r">618</td><td class="r">1.90</td><td class="r">14.93</td><td class="r">20.6</td></tr>
-        <tr><td>A2029</td><td class="r">0.079</td><td class="r">34,829</td><td class="r">2,235</td><td class="r">1,377</td><td class="r">538</td><td class="r">1.90</td><td class="r">14.93</td><td class="r">20.6</td></tr>
-        <tr><td>A2065</td><td class="r">0.073</td><td class="r">25,159</td><td class="r">3,109</td><td class="r">1,099</td><td class="r">609</td><td class="r">2.03</td><td class="r">15.01</td><td class="r">21.1</td></tr>
-      </tbody>
-    </table>
-    </div>
-    <p class="caption">Ordered by <em>M</em><sub>200</sub>. <em>N</em><sub>spec</sub> counts all galaxies with redshifts in the field; <em>N</em><sub>mem</sub> are caustic members. <em>r</em><sub>comp</sub> is the magnitude where cumulative spectroscopic completeness drops below 90%. Tables 1–2 of Park et al. (2026).</p>
-
-    <h3>What we have learned so far</h3>
+    <p class="eyebrow">Catalog</p>
+    <h2>What is in it</h2>
     <div class="cards">
-      <div class="card"><h4>Cluster vs. field</h4><p>Between log&nbsp;<em>M</em><sub>*</sub> = 10.5 and 11.4 the cluster SMF has the same shape as the field but twice the amplitude. Above 11.4 the clusters show a clear excess of massive galaxies, including the BCGs.</p></div>
-      <div class="card"><h4>Quiescent vs. star-forming</h4><p>Quiescent galaxies follow a curved SMF peaking near log&nbsp;<em>M</em><sub>*</sub> ≈ 10.5; star-forming galaxies rise monotonically toward low mass. In the cluster core the quiescent peak shifts to lower mass.</p></div>
-      <div class="card"><h4>Quenching toward the center</h4><p>The quiescent fraction rises toward the cluster center at every stellar mass, and most steeply for low-mass galaxies.</p></div>
-      <div class="card"><h4>Against IllustrisTNG-300</h4><p>Simulated clusters of the same mass match the observed SMF at 10.5–11.4, but host too-massive BCGs and about half as many galaxies at log&nbsp;<em>M</em><sub>*</sub> = 9–10.5.</p></div>
+      <div class="card">
+        <h4>227 clusters</h4>
+        <p>Identifier, position, redshift, number of caustic members overall and within <em>R</em><sub>200</sub>, velocity dispersion, <em>R</em><sub>200</sub> and <em>M</em><sub>200</sub>.</p>
+      </div>
+      <div class="card">
+        <h4>220 BCGs</h4>
+        <p>SDSS object ID, position, redshift, <em>r</em>-band magnitude, stellar mass, D<sub>n</sub>4000 and central stellar velocity dispersion.</p>
+      </div>
+      <div class="card">
+        <h4>52,325 members</h4>
+        <p>Redshifts from Hectospec and SDSS with derived absolute magnitude, D<sub>n</sub>4000, stellar mass and central stellar velocity dispersion.</p>
+      </div>
     </div>
-
-    <figure>
-      <img src="img/park2026_fig15.png" alt="Stellar mass functions of all, quiescent and star-forming galaxies in three radial bins of the MACH clusters, and in the field.">
-      <figcaption>Stellar mass functions of quiescent (red) and star-forming (blue) galaxies in three cluster-centric radial bins of the stacked MACH sample, compared with the SDSS field (right). Grey bands mark the incomplete regime. From Park et al. (2026).</figcaption>
-    </figure>
-    <figure class="fig-narrow">
-      <img src="img/park2026_fig16.png" alt="Quiescent fraction as a function of stellar mass in three radial bins and in the field.">
-      <figcaption>The quiescent fraction as a function of stellar mass, from the cluster core (dark) to the outskirts and the field (light). From Park et al. (2026).</figcaption>
-    </figure>
+    <p class="prose caption" style="margin-top:1.4rem">Most clusters have velocity dispersions above 400&nbsp;km&nbsp;s<sup>−1</sup> and dynamical masses above 10<sup>14</sup>&nbsp;M<sub>☉</sub>; less massive systems appear only at <em>z</em>&nbsp;≲&nbsp;0.1 because of Malmquist bias.</p>
   </div>
 </section>
 
-<section id="data" class="alt">
+<section id="mach-teaser" class="alt">
+  <div class="wrap">
+    <div class="teaser">
+      <div>
+        <p class="eyebrow" style="margin-bottom:0.6rem">Going deeper</p>
+        <h3>Curious how far the spectroscopy can go?</h3>
+        <p>MACH takes the nine most massive, best-sampled clusters in HeCS-omnibus and observes them to completion — more than 4,500 spectra each, no color selection, stellar mass functions two dex deeper than SDSS.</p>
+      </div>
+      <div><a class="btn secondary" href="mach/">Visit MACH →</a></div>
+    </div>
+  </div>
+</section>
+
+<section id="data">
   <div class="wrap">
     <p class="eyebrow">Data</p>
     <h2>Get the data</h2>
     <div class="databox">
-      <h3>HeCS-omnibus &amp; MACH data release</h3>
-      <p>Cluster catalog, BCG catalog, member galaxies with derived properties, and MACH spectroscopic products. File-level documentation will appear here as the release is finalized.</p>
+      <h3>HeCS-omnibus data release</h3>
+      <p>Cluster catalog, BCG catalog, member galaxies with derived properties, and the MACH spectroscopic products. File-level documentation will appear here as the release is finalized.</p>
       <a class="btn" href="http://147.46.135.40:3000/sharing/va94quU2B" rel="noopener">Open the data archive →</a>
-      <small>Hosted at Seoul National University. The archive is served over plain HTTP; your browser may show a warning before opening it.</small>
+      <small>Hosted at Seoul National University. The archive is served over plain HTTP, so your browser may show a warning before opening it.</small>
     </div>
 
     <div class="two">
       <div>
         <h3 style="margin-top:0">Also available</h3>
-        <ul style="padding-left:1.2em;color:var(--ink-2)">
-          <li><a href="https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/891/129">VizieR J/ApJ/891/129</a> — HeCS-omnibus cluster and BCG tables (Sohn et al. 2020)</li>
-          <li><a href="https://doi.org/10.7910/DVN/UR9XE5">Harvard Dataverse</a> — BCG identification figures for all 227 clusters</li>
+        <ul class="links">
+          <li><a href="https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/891/129">VizieR J/ApJ/891/129</a> — HeCS-omnibus cluster and BCG tables</li>
+          <li><a href="https://doi.org/10.7910/DVN/UR9XE5">Harvard Dataverse</a> — BCG identification figures for every cluster</li>
           <li><a href="https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/862/172">J/ApJ/862/172</a> · <a href="https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/819/63">J/ApJ/819/63</a> · <a href="https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/767/15">J/ApJ/767/15</a> · <a href="https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/AJ/132/1275">J/AJ/132/1275</a> — HeCS-red, HeCS-SZ, HeCS and CIRS</li>
           <li><a href="http://oirsa.cfa.harvard.edu/archive/search/">MMT/OIRSA archive</a> — raw Hectospec spectra</li>
         </ul>
@@ -351,7 +161,7 @@
       <div>
         <h3 style="margin-top:0">How to cite</h3>
         <div class="cite" style="margin-top:0">
-          If you use HeCS-omnibus data, please cite <a href="https://ui.adsabs.harvard.edu/abs/2020ApJ...891..129S">Sohn et al. (2020), ApJ 891, 129</a>.<br>
+          If you use HeCS-omnibus data, please cite <a href="https://ui.adsabs.harvard.edu/abs/2020ApJ...891..129S">Sohn et al. (2020), ApJ 891, 129</a>.<br><br>
           For MACH, please cite <a href="https://ui.adsabs.harvard.edu/abs/2026ApJ..1001..185P">Park et al. (2026), ApJ 1001, 185</a>.
         </div>
       </div>
@@ -359,12 +169,12 @@
   </div>
 </section>
 
-<section id="publications">
+<section id="publications" class="alt">
   <div class="wrap">
     <p class="eyebrow">Publications</p>
     <h2>Papers</h2>
 
-    <h3 style="margin-top:1rem">The surveys</h3>
+    <h3 style="margin-top:1.2rem">The surveys</h3>
     <ol class="pubs">
       <li><span class="yr">2026</span><div><span class="t">The Stellar Mass Function for Nine Massive Galaxy Clusters in the Local Universe</span><span class="tag">MACH</span><div class="a">Park, Sohn, Geller, Rines &amp; Diaferio — ApJ 1001, 185</div><div class="l"><a href="https://ui.adsabs.harvard.edu/abs/2026ApJ..1001..185P">ADS</a><a href="https://arxiv.org/abs/2603.03797">arXiv</a><a href="https://doi.org/10.3847/1538-4357/ae4c60">DOI</a></div></div></li>
       <li><span class="yr">2020</span><div><span class="t">Velocity Dispersions of Brightest Cluster Galaxies and Their Host Clusters</span><span class="tag">HeCS-omnibus</span><div class="a">Sohn, Geller, Diaferio &amp; Rines — ApJ 891, 129</div><div class="l"><a href="https://ui.adsabs.harvard.edu/abs/2020ApJ...891..129S">ADS</a><a href="https://arxiv.org/abs/1910.11192">arXiv</a><a href="https://doi.org/10.3847/1538-4357/ab6e6a">DOI</a></div></div></li>
@@ -380,7 +190,7 @@
       <li><span class="yr">2021</span><div><span class="t">Mass accretion rates of clusters of galaxies: CIRS and HeCS</span><div class="a">Pizzardo, Di Gioia, Diaferio, De Boni, Serra, Geller, Sohn, Rines &amp; Baldi — A&amp;A 646, A105</div><div class="l"><a href="https://ui.adsabs.harvard.edu/abs/2021A&A...646A.105P">ADS</a><a href="https://arxiv.org/abs/2005.11562">arXiv</a><a href="https://doi.org/10.1051/0004-6361/202038481">DOI</a></div></div></li>
       <li><span class="yr">2020</span><div><span class="t">The Velocity Dispersion Function for Quiescent Galaxies in Nine Strong-lensing Clusters</span><div class="a">Sohn, Fabricant, Geller, Hwang &amp; Diaferio — ApJ 902, 17</div><div class="l"><a href="https://ui.adsabs.harvard.edu/abs/2020ApJ...902...17S">ADS</a><a href="https://arxiv.org/abs/2007.00679">arXiv</a><a href="https://doi.org/10.3847/1538-4357/abb23b">DOI</a></div></div></li>
     </ol>
-    <p class="caption" style="margin-top:1rem">A longer list of papers using HeCS-omnibus is available through <a href="https://ui.adsabs.harvard.edu/search/q=citations(bibcode%3A2020ApJ...891..129S)">ADS citations</a>.</p>
+    <p class="caption" style="margin-top:1.2rem">A fuller list of papers using HeCS-omnibus is available through <a href="https://ui.adsabs.harvard.edu/search/q=citations(bibcode%3A2020ApJ...891..129S)">ADS citations</a>.</p>
   </div>
 </section>
 
@@ -391,9 +201,9 @@
       <h2>People</h2>
     </div>
     <div class="prose">
-      <p>HeCS-omnibus and MACH are a collaboration between Seoul National University, the Center for Astrophysics | Harvard &amp; Smithsonian, Western Washington University and the University of Turin.</p>
-      <p>Questions about the data: <a href="mailto:jongin.park@snu.ac.kr">Jong-In Park</a> (Seoul National University).</p>
-      <p class="muted" style="font-size:0.92rem">Observations reported here were obtained at the MMT Observatory, a joint facility of the University of Arizona and the Smithsonian Institution. This work uses data from the Sloan Digital Sky Survey. Supported by the National Research Foundation of Korea (RS-2023-00210597, RS-2023-00301976).</p>
+      <p>HeCS-omnibus is a collaboration between Seoul National University, the Center for Astrophysics&nbsp;|&nbsp;Harvard&nbsp;&amp;&nbsp;Smithsonian, Western Washington University and the University of Turin.</p>
+      <p>Questions about the data: <a href="mailto:jongin.park@snu.ac.kr">Jong-In Park</a>, Seoul National University.</p>
+      <p class="muted" style="font-size:0.9rem">Observations reported here were obtained at the MMT Observatory, a joint facility of the University of Arizona and the Smithsonian Institution. This work uses data from the Sloan Digital Sky Survey and was supported by the National Research Foundation of Korea (RS-2023-00210597, RS-2023-00301976).</p>
     </div>
   </div>
 </section>
